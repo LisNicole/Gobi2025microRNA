@@ -28,17 +28,17 @@ fi
 directory=$(echo "${directory}" | sed 's![^/]$!&/!')
 
 # Get sample name from adapter file
-sample=$(awk '!/^#/ {print $1; exit}' ${adapter_file})
+#sample=$(awk '!/^#/ {print $1; exit}' ${adapter_file})
 
-echo "Running test on sample: ${sample}"
+#echo "Running test on sample: ${sample}"
 
 ### Download GtRNAdb.fasta ###
-echo "Downloading GtRNAdb.fasta file"
-wget https://gtrnadb.ucsc.edu/download/gtRNAdb.fasta -O ${directory}GtRNAdb.fasta
+#echo "Downloading GtRNAdb.fasta file"
+#wget https://gtrnadb.ucsc.edu/download/gtRNAdb.fasta -O ${directory}GtRNAdb.fasta
 
-echo "GtRNAdb.fasta downloaded successfully!"
+#echo "GtRNAdb.fasta downloaded successfully!"
 
-echo "Test completed successfully!"
+#echo "Test completed successfully!"
 
 
 
@@ -46,6 +46,41 @@ echo "Test completed successfully!"
 
 #Getting sample names from adapter file
 samples=$(awk '!/^#/' ${adapter_file} | awk '{print $1}')
+
+##Quality Control (FastQC)###
+
+Make output directory for FastQC reports
+
+	mkdir ${directory}FastQC_Reports
+
+for sample in $samples
+do
+
+#Run FastQC
+#For further usage details: https://www.bioinformatics.babraham.ac.uk/projects/fastqc/Help/
+
+for file in $(ls ${directory}${sample}/ | awk '/fastq/')
+do
+
+	fastqc \
+	-o ${directory}FastQC_Reports \
+	${directory}${sample}/${file}
+
+done
+
+done
+
+
+###Quality Control (MultiQC)###
+
+#Make output directory for MultiQC report
+
+	#mkdir ${directory}MultiQC_Report
+
+#Run MultiQC
+#For further usage details: https://multiqc.info/docs/
+
+	#/mnt/c/Users/Juli/PycharmProjects/Gobi2025microRNA/.venv/Scripts/multiqc.exe ${directory}FastQC_Reports -o ${directory}MultiQC_Report
 
 
 for sample in $samples
@@ -56,6 +91,8 @@ five_prime_adapter=$(awk -v var1=$sample '$1==var1' ${adapter_file} | awk -F '\t
 three_prime_adapter=$(awk -v var1=$sample '$1==var1' ${adapter_file} | awk -F '\t' '{print $3}')
 five_prime_barcode=$(awk -v var1=$sample '$1==var1' ${adapter_file} | awk -F '\t' '{print $4}')
 three_prime_barcode=$(awk -v var1=$sample '$1==var1' ${adapter_file} | awk -F '\t' '{print $5}')
+
+  mkdir -p ${directory}${sample}
 
   #Remove 'sample.summary.txt' file if it exists, to ensure a proper end file
 
@@ -74,9 +111,11 @@ three_prime_barcode=$(awk -v var1=$sample '$1==var1' ${adapter_file} | awk -F '\
 
     echo "Start: $(date)" >> ${directory}${sample}/${sample}.summary.txt
 
+cp ${directory}raw_data/${sample}.fastq.gz ${directory}${sample} # change do directory with all data ####### and change bash command
 
 for file in $(ls ${directory}${sample}/ | awk '/fastq/')
 do
+
 
 ##########
 #Print the number of reads in each of the files in the sample directory in the 'sample.summary.txt' file
