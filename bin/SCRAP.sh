@@ -57,17 +57,17 @@ three_prime_adapter=$(awk -v var1=$sample '$1==var1' ${adapter_file} | awk -F '\
 five_prime_barcode=$(awk -v var1=$sample '$1==var1' ${adapter_file} | awk -F '\t' '{print $4}')
 three_prime_barcode=$(awk -v var1=$sample '$1==var1' ${adapter_file} | awk -F '\t' '{print $5}')
 
-  #Remove 'sample.summary.txt' file if it exists
+  #Remove 'sample.summary.txt' file if it exists, to ensure a proper end file
 
     [ -e ${directory}${sample}/${sample}.summary.txt ] && rm ${directory}${sample}/${sample}.summary.txt
 
-  #Print the name of the sample being processed in the 'sample.summary.txt' file
+  #Print the name of the current sample being processed in the 'sample.summary.txt' file
 
     echo "$sample" >> ${directory}${sample}/${sample}.summary.txt
 
   #Print the structure of the reads for the sample being processed in the 'sample.summary.txt' file
 
-    echo "5'-${five_prime_adapter}${five_prime_barcode}...sncRNA-targetRNA...${three_prime_barcode}${three_prime_adapter}-3'" >> ${directory}${sample}/${sample}.summary.txt
+    echo "5'-${five_prime_adapter}${five_prime_barcode}...miRNA...${three_prime_barcode}${three_prime_adapter}-3'" >> ${directory}${sample}/${sample}.summary.txt
 
 
   #Print the date and time that processing begins on the sample being processed in the 'sample.summary.txt' file
@@ -92,8 +92,9 @@ done
 ###Combine Paired-End Reads (FLASh)###
 
 #If the user set the paired-end parameter [-p] to yes, combine paired end reads
-#IF the user set the paired-end parameter [-p] to no (or anything other than yes), skip this step
+#IF the user set the paired-end parameter [-p] to anything other than yes skip this step
 
+#If there are paired end reads
 if [ $paired_end == "yes" ]
 then
 
@@ -222,7 +223,7 @@ fi
 
 
 ##########
-#Print the number of reads following ndeduplication in the 'sample.summary.txt' file
+#Print the number of reads following deduplication in the 'sample.summary.txt' file
 
 	echo "${sample} deduplicated reads: $(( $(wc -l ${directory}${sample}/${sample}.cutadapt.deduped.fasta | awk '{print $1}') / 2 ))" >> ${directory}${sample}/${sample}.summary.txt
 ##########
