@@ -102,7 +102,6 @@ then
 	mkdir ${directory}${sample}/${sample}_FLASh
 
 #Run FLASh
-#For further usage details: http://gensoft.pasteur.fr/docs/FLASH/1.2.11/flash
 
 	flash \
 	--allow-outies \
