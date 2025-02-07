@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="c62575b0-cf75-44d3-a769-4452ed6f0d83" name="lxhalle.in.tum.de">
+        <fileTransfer rootFolder="/u/halle/ge59puj/home_at" accessType="SFTP" host="lxhalle.in.tum.de" port="22" sshConfigId="ab0a27a5-6bcd-4abb-a92a-77b3adae7948" sshConfig="ge59puj@lxhalle.in.tum.de:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SshConfigs">
+    <configs>
+      <sshConfig authType="PASSWORD" host="lxhalle.in.tum.de" id="ab0a27a5-6bcd-4abb-a92a-77b3adae7948" port="22" nameFormat="DESCRIPTIVE" username="ge59puj" useOpenSSHConfig="true" />
+    </configs>
+  </component>
+</project>
