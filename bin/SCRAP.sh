@@ -1,37 +1,24 @@
 #!/bin/sh
 
-#Command to run this script: bash gobi2025/bin/SCRAP.sh \
-                                # -d /u/halle/ge59puj/home_at/gobi2025/directory/ \
-                                # -a /u/halle/ge59puj/home_at/gobi2025/adapters/test.txt \
-                                # -p no \
-                                # -f yes \
-                                # -r gobi2025/ \
-                                # -m mmu \
-                                # -g mm39
-
-while getopts d:a:p:f:r:m:g: flag
+# Parse arguments
+while getopts d:a:p: flag
 do
     case "${flag}" in
-        d) directory=${OPTARG};;
-        a) adapter_file=${OPTARG};;
-        p) paired_end=${OPTARG};;
-        f) pre_filtered=${OPTARG};;
-        r) reference_directory=${OPTARG};;
-        m) miRBase_species_abbreviation=${OPTARG};;
-        g) genome_species_abbreviation=${OPTARG};;
+        d) directory=${OPTARG};;  # Sample directory
+        a) adapter_file=${OPTARG};;  # Adapter file
+        p) paired_end=${OPTARG};;  # Paired-end sequencing (yes/no)
     esac
 done
 
+# Check if all required arguments are provided
 if [ -z "$directory" ]; then
     echo "Error: Path to sample directories not provided [-d]"
     exit 1
 fi
-
 if [ -z "$adapter_file" ]; then
     echo "Error: Path to adapter file not provided [-a]"
     exit 1
 fi
-
 if [ -z "$paired_end" ]; then
     echo "Error: Are samples paired-end? [-p]"
     exit 1
@@ -87,16 +74,19 @@ maximum_gap_if_maximum_mismatch=0
 
 minimum_length_after_sncRNA=15
 
-#In this pipeline, intermediate files are removed to save space on the computer's memory
-#If you wish to keep intermediate files (and have sufficient storage on your computer), consider removing or hiding the lines of code beginning with 'rm'
+### Download GtRNAdb.fasta ###
+#echo "Downloading GtRNAdb.fasta file"
+#wget https://gtrnadb.ucsc.edu/download/gtRNAdb.fasta -O ${directory}GtRNAdb.fasta
 
-#File is generated in sample folder called "Sample".summary.txt that summarizes number of reads following each step
-#Sections separated with ########## are code for counting reads
+#echo "GtRNAdb.fasta downloaded successfully!"
+
+#echo "Test completed successfully!"
 
 #For the most part, code modifications are not required below this line
 ##############################################################################
 
 #Activate conda environment
+
 
 	location=$(conda info | awk '/base environment/' | awk '{print $4}')
 	source ${location}/etc/profile.d/conda.sh
@@ -105,10 +95,9 @@ minimum_length_after_sncRNA=15
 
 samples=$(awk '!/^#/' ${adapter_file} | awk '{print $1}')
 
+##Quality Control (FastQC)###
 
-###Quality Control (FastQC)###
-
-#Make output directory for FastQC reports
+Make output directory for FastQC reports
 
 	mkdir ${directory}FastQC_Reports
 
@@ -134,7 +123,7 @@ done
 
 #Make output directory for MultiQC report
 
-	mkdir ${directory}MultiQC_Report
+	#mkdir ${directory}MultiQC_Report
 
 #Run MultiQC
 #For further usage details: https://multiqc.info/docs/
@@ -197,6 +186,7 @@ done
 #If the user set the paired-end parameter [-p] to yes, combine paired end reads
 #IF the user set the paired-end parameter [-p] to no (or anything other than yes), skip this step
 
+#If there are paired end reads
 if [ $paired_end == "yes" ]
 then
 
@@ -299,12 +289,11 @@ fi
 	mv ${directory}${sample}/${sample}.tmp.fastq.gz ${directory}${sample}/${sample}.cutadapt.fastq.gz
 
 
-###Deduplicate Reads###
+	###Deduplicate Reads###
 
 #Unzip FASTQ file from Cutadapt
 
 	gunzip ${directory}${sample}/${sample}.cutadapt.fastq.gz
-
 
 ##########
 #Print the number of reads following nonbarcoded adapter removal in the 'sample.summary.txt' file
