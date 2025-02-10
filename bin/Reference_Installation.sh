@@ -12,7 +12,7 @@ do
         r) reference_directory=${OPTARG};;
         m) miRBase_species_abbreviation=${OPTARG};;
         g) genome_species_abbreviation=${OPTARG};;
-	      s) species=${OPTARG};;
+	s) species=${OPTARG};;
     esac
 done
 
@@ -126,7 +126,8 @@ fi
 	-dbtype nucl
 
 	cd ..
+	cd annotation
 
-	gunzip ${miRBase_species_abbreviation}.annotation.bed.gz
+	gunzip ${species}.annotation.bed.gz
 
 	conda deactivate

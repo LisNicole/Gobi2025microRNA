@@ -2,8 +2,8 @@
 <project version="4">
   <component name="WebServers">
     <option name="servers">
-      <webServer id="c62575b0-cf75-44d3-a769-4452ed6f0d83" name="lxhalle.in.tum.de">
-        <fileTransfer rootFolder="/u/halle/ge59puj/home_at" accessType="SFTP" host="lxhalle.in.tum.de" port="22" sshConfigId="ab0a27a5-6bcd-4abb-a92a-77b3adae7948" sshConfig="ge59puj@lxhalle.in.tum.de:22 password">
+      <webServer id="a6b5b4c4-da8d-4432-b328-f31bb802e794" name="lxhalle.in.tum.de">
+        <fileTransfer rootFolder="/u/halle/ge59puj/home_at" accessType="SFTP" host="lxhalle.in.tum.de" port="22" sshConfigId="6a71a80a-f187-48e4-bfc6-b6482c220f74" sshConfig="ge59puj@lxhalle.in.tum.de:22 password">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>
