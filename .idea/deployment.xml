@@ -7,6 +7,9 @@
           <mappings>
             <mapping deploy="/gobi2025" local="$PROJECT_DIR$" web="/" />
           </mappings>
+          <excludedPaths>
+            <excludedPath path="/gobi2025/directory/SRR2413277/SRR2413277.aligned.unique.bam" />
+          </excludedPaths>
         </serverdata>
       </paths>
     </serverData>
