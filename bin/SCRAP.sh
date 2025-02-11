@@ -70,7 +70,6 @@ maximum_gap_if_maximum_mismatch=0
 #Minimum length of sequence after the sncRNA within a read (after adapter and barcode removal)
 minimum_length_after_sncRNA=15
 
-#For the most part, code modifications are not required below this line
 ##############################################################################
 
 #Activate conda environment
@@ -80,7 +79,6 @@ minimum_length_after_sncRNA=15
 	conda activate SCRAP
 
 samples=$(awk '!/^#/' ${adapter_file} | awk '{print $1}')
-
 
 ###Quality Control (FastQC)###
 #Make output directory for FastQC reports
@@ -416,7 +414,7 @@ fi
 
 	mv ${directory}${sample}/${sample}.cutadapt.deduped.barcoded.blast ${directory}${sample}/${sample}.cutadapt.deduped.barcoded.sncRNA.blast
 
-	# BLAST the filtered CLIPPED reads with the miRNA sequences (plus strand) #\  Modified: Ranjan
+	# BLAST the filtered CLIPPED reads with the miRNA sequences (plus strand)
 	blastn \
 	-db ${reference_directory}/fasta/${miRBase_species_abbreviation}/miRNA_${miRBase_species_abbreviation}.fasta \
 	-query ${directory}${sample}/${sample}.cutadapt.deduped.barcoded.fasta \
@@ -428,7 +426,7 @@ fi
 
 	mv ${directory}${sample}/${sample}.cutadapt.deduped.barcoded.blast ${directory}${sample}/${sample}.cutadapt.deduped.barcoded.miRNA.plus.blast
 
-	# BLAST the filtered CLIPPED reads with the miRNA sequences (minus strand) #\  Modified: Ranjan
+	# BLAST the filtered CLIPPED reads with the miRNA sequences (minus strand)
 	blastn \
 	-db ${reference_directory}/fasta/${miRBase_species_abbreviation}/miRNA_${miRBase_species_abbreviation}.fasta \
 	-query ${directory}${sample}/${sample}.cutadapt.deduped.barcoded.fasta \
@@ -450,7 +448,7 @@ fi
 	-num_threads 12
 	# -strand plus
 
-	# BLAST the filtered CLIPPED reads with the hairpin sequences (plus strand)		#\  Modified: Ranjan
+	# BLAST the filtered CLIPPED reads with the hairpin sequences (plus strand)
 	blastn \
 	-db ${reference_directory}/fasta/${miRBase_species_abbreviation}/hairpin_${miRBase_species_abbreviation}.fasta \
 	-query ${directory}${sample}/${sample}.cutadapt.deduped.barcoded.fasta \
@@ -462,7 +460,7 @@ fi
 
 	mv ${directory}${sample}/${sample}.cutadapt.deduped.barcoded.blast ${directory}${sample}/${sample}.cutadapt.deduped.barcoded.hairpin.plus.blast
 
-	# BLAST the filtered CLIPPED reads with the hairpin sequences (minus strand)		#\  Modified: Ranjan
+	# BLAST the filtered CLIPPED reads with the hairpin sequences (minus strand)
 	blastn \
 	-db ${reference_directory}/fasta/${miRBase_species_abbreviation}/hairpin_${miRBase_species_abbreviation}.fasta \
 	-query ${directory}${sample}/${sample}.cutadapt.deduped.barcoded.fasta \
