@@ -473,9 +473,9 @@ fi
 # num_threads increased to 12 : Modified by ranjan
 
 # Uncomment below if you need to build the BLAST database:
-# makeblastdb \
-#     -in "${reference_directory}/fasta/${miRBase_species_abbreviation}/miRNA_${miRBase_species_abbreviation}.fasta" \
-#     -dbtype nucl
+makeblastdb \
+     -in "${reference_directory}/fasta/${miRBase_species_abbreviation}/miRNA_${miRBase_species_abbreviation}.fasta" \
+     -dbtype nucl
 
 blastn \
     -db "${reference_directory}/fasta/${miRBase_species_abbreviation}/sncRNA_${miRBase_species_abbreviation}.fasta" \
@@ -730,7 +730,8 @@ hisat2 \
     -x "${reference_directory}/fasta/${genome_species_abbreviation}/${genome_species_abbreviation}" \
     -f "${directory}${sample}/${sample}.target.fasta" \
     -S "${directory}${sample}/${sample}.aligned.sam" \
-    --summary-file "${directory}${sample}/${sample}.hisat2summary.txt"
+    --summary-file "${directory}${sample}/${sample}.hisat2summary.txt" \
+    --un "${directory}${sample}/${sample}.unaligned.fasta"
 
 ##########
 # Print the number of reads that aligned the genome a single time in the 'sample.summary.txt' file

@@ -1,18 +1,12 @@
 #!/bin/sh
 
-#command to run the script for species mouse: bash gobi2025/bin/Reference_Installation.sh \
-                            #  -r gobi2025/ \
-                            #  -m mmu \
-                            #  -g mm39 \
-                            #  -s mouse
-
 while getopts r:m:g:s: flag
 do
     case "${flag}" in
         r) reference_directory=${OPTARG};;
         m) miRBase_species_abbreviation=${OPTARG};;
         g) genome_species_abbreviation=${OPTARG};;
-	s) species=${OPTARG};;
+	      s) species=${OPTARG};;
     esac
 done
 
@@ -128,6 +122,7 @@ fi
 	cd ..
 	cd annotation
 
+#gunzip mouse.annotation.bed.gz
 	gunzip ${species}.annotation.bed.gz
 
 	conda deactivate
