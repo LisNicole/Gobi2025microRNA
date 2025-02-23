@@ -1,0 +1,24 @@
+name: SCRAP
+channels:
+  - bioconda
+  - conda-forge
+dependencies:
+  - fastqc
+  - multiqc
+  - flash
+  - cutadapt
+  - blast
+  - hisat2
+  - samtools
+  - bedtools
+  - gatk4
+  - sra-tools
+  - viennarna
+  - bowtie2
+  - picard
+  - flexbar
+  - homer
+  - khmer
+  - libuuid=2.38.1  # Add specific version of libuuid
+  # Optionally, specify or remove ossuuid depending on requirements
+  # - ossuuid=1.6.2

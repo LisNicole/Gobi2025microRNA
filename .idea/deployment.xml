@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" serverName="lxhalle.in.tum.de">
+    <serverData>
+      <paths name="lxhalle.in.tum.de">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/gobi2025" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+          <excludedPaths>
+            <excludedPath path="/gobi2025/directory/SRR2413277/SRR2413277.aligned.unique.bam" />
+          </excludedPaths>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>
