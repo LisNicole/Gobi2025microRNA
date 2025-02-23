@@ -12,8 +12,6 @@ This pipeline is based on the following two GitHub repositories:
 ├── adapters/                    # Adapter sequences for preprocessing
 ├── annotations/                 # miRBase annotation files
 ├── bin/                         # Source code and scripts
-├── cortex_samples/              # Mouse cortex sample data
-├── keratinocyte_samples/        # Mouse keratinocyte sample data
 ├── README.md                    # Project documentation
 └── SCRAP_environment.yml        # Conda environment file for dependency setup
 ```
