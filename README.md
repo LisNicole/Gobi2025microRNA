@@ -15,6 +15,24 @@ This pipeline is based on the following two GitHub repositories:
 ├── README.md                    # Project documentation
 └── SCRAP_environment.yml        # Conda environment file for dependency setup
 ```
+## bin/ Directory Contents
+The `bin/` directory contains various scripts used in the analysis pipeline. Below is a brief description of each script:
+
+- **Peak_Calling_Histo.sh** - Shell script for generating histograms related to peak calling.
+- **Peak_Annotation.sh** - Annotates detected peaks with reference genome information.
+- **Peak_Calling.sh** - Main script for performing peak calling from sequencing data.
+- **Reference_Installation.sh** - Installs and configures reference genome files for analysis.
+- **SCRAP.sh** - Runs the SCRAP pipeline for miRNA/isomiR detection.
+- **SCRAP_original.sh** - Original, unmodified version of the SCRAP pipeline.
+
+### **bin/downstream_analysis/ Directory Contents**
+This subdirectory contains scripts for downstream data analysis after peak calling.
+
+- **2a_miRNA_distribution.py** - Python script for analyzing miRNA distribution.
+- **2b_Peak_Calling_Histo.sh** - Shell script for generating histograms related to miRNA peak calling.
+- **2c_Find_Shared_3UTR_Targets.sh** - Identifies miRNA target genes with shared 3' UTR regions.
+- **2c_find_shared_targets.sh** - Detects shared miRNA target genes.
+- **2c_plot_histogram.py** - Python script for visualizing distributions of shared miRNA targets.
 
 ## **Setup**
 ```bash
