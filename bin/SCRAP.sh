@@ -72,15 +72,10 @@ maximum_gap_if_maximum_mismatch=0
 #Minimum length of sequence after the sncRNA within a read (after adapter and barcode removal)
 minimum_length_after_sncRNA=15
 
-#In this pipeline, intermediate files are removed to save space on the computer's memory
-#If you wish to keep intermediate files (and have sufficient storage on your computer), consider removing or hiding the lines of code beginning with 'rm'
-
 #File is generated in sample folder called "Sample".summary.txt that summarizes number of reads following each step
 #Sections separated with ########## are code for counting reads
 
-#For the most part, code modifications are not required below this line
 ##############################################################################
-
 #Activate conda environment
 	location=$(conda info | awk '/base environment/' | awk '{print $4}')
 	source ${location}/etc/profile.d/conda.sh
@@ -96,16 +91,16 @@ samples=$(awk '!/^#/' ${adapter_file} | awk '{print $1}')
 for sample in $samples
 do
 
-#Run FastQC
-#For further usage details: https://www.bioinformatics.babraham.ac.uk/projects/fastqc/Help/
-for file in $(ls ${directory_new}${sample}/ | awk '/fastq/')
-do
+  #Run FastQC
+  #For further usage details: https://www.bioinformatics.babraham.ac.uk/projects/fastqc/Help/
+  for file in $(ls ${directory_new}${sample}/ | awk '/fastq/')
+  do
 
-	fastqc \
-	-o ${directory_new}FastQC_Reports \
-	${directory_new}${sample}/${file}
+    fastqc \
+    -o ${directory_new}FastQC_Reports \
+    ${directory_new}${sample}/${file}
 
-done
+  done
 
 done
 
@@ -119,7 +114,6 @@ done
 
 for sample in $samples
 do
-
 #Extract adapter and barcode sequences from adapter file
 five_prime_adapter=$(awk -v var1=$sample '$1==var1' ${adapter_file} | awk -F '\t' '{print $2}')
 three_prime_adapter=$(awk -v var1=$sample '$1==var1' ${adapter_file} | awk -F '\t' '{print $3}')
@@ -150,7 +144,6 @@ do
 
 ##########
 #Print the number of reads in each of the files in the sample directory_new in the 'sample.summary.txt' file
-
 	gunzip -c ${directory_new}${sample}/${file} > ${directory_new}${sample}/${file}.tmp
 	echo "${file} raw reads: $(( $(wc -l ${directory_new}${sample}/${file}.tmp | awk '{print $1}') / 4 ))" >> ${directory_new}${sample}/${sample}.summary.txt
 	rm ${directory_new}${sample}/${file}.tmp
@@ -187,7 +180,6 @@ then
 #If paired-end reads were combined, delete the folder containing the temporary files generated during FLASh
 	[ -e ${directory_new}${sample}/${sample}_FLASh ] && rm -r ${directory_new}${sample}/${sample}_FLASh
 
-
 ##########
 #Print the number of reads following FLASh (if performed) in the 'sample.summary.txt' file
 	gunzip -k ${directory_new}${sample}/${sample}.fastq.gz
@@ -208,7 +200,7 @@ fi
 #If present, remove the 5' adapter sequence from the read
 #Minimum quality score set to 30 [-q 30]
 #Minimum length set to 30 [-m 30]
-#Some library preparations may result in sequential ligation of adapters, therefore 2 rounds [-n 2] of adapter removal are performed in case this occured
+#Some library preparations may result in sequential ligation of adapters, therefore 2 rounds [-n 2] of adapter removal are performed in case this occurred
 
 if [ ! -z "${five_prime_adapter}" ]
 then
@@ -229,9 +221,7 @@ then
 fi
 
 #If present, remove the 3' adapter sequence from the read
-#Minimum quality score set to 30 [-q 30]
-#Minimum length set to 30 [-m 30]
-#Some library preparations may result in sequential ligation of adapters, therefore 2 rounds [-n 2] of adapter removal are performed in case this occured
+#Parameters are the same as for the 5' adapter sequence removal
 if [ ! -z "${three_prime_adapter}" ]
 then
 
@@ -288,16 +278,14 @@ mv ${directory_new}${sample}/${sample}.trimmed.fastq.gz ${directory_new}${sample
 	rm ${directory_new}${sample}/${sample}.cutadapt.fastq
 
 ##########
-#Print the number of reads following ndeduplication in the 'sample.summary.txt' file
+#Print the number of reads following deduplication in the 'sample.summary.txt' file
 	echo "${sample} deduplicated reads: $(( $(wc -l ${directory_new}${sample}/${sample}.cutadapt.deduped.fasta | awk '{print $1}') / 2 ))" >> ${directory_new}${sample}/${sample}.summary.txt
 ##########
 
 ###Remove random barcodes (Cutadapt)###
 
 #If present, remove the 5' barcode sequence from the read
-#Minimum quality score set to 30 [-q 30]
-#Minimum length set to 30 [-m 30]
-#Some library preparations may result in sequential ligation of adapters, therefore 2 rounds [-n 2] of adapter removal are performed in case this occured
+#Parameters are the same as for the 5' adapter sequence removal
 if [ ! -z "${five_prime_barcode}" ]
 then
 
@@ -314,9 +302,7 @@ then
 fi
 
 #If present, remove the 3' barcode sequence from the read
-#Minimum quality score set to 30 [-q 30]
-#Minimum length set to 30 [-m 30]
-#Some library preparations may result in sequential ligation of adapters, therefore 2 rounds [-n 2] of adapter removal are performed in case this occured
+#Parameters are the same as for the 5' adapter sequence removal
 if [ ! -z "${three_prime_barcode}" ]
 then
 
@@ -336,7 +322,6 @@ fi
 	mv ${directory_new}${sample}/${sample}.cutadapt.deduped.fasta ${directory_new}${sample}/${sample}.cutadapt.deduped.barcoded.fasta
 
 ##########
-
 
 #Print the number of reads following barcoded adapter removal in the 'sample.summary.txt' file
 	echo "${sample} reads following barcode removal: $(( $(wc -l ${directory_new}${sample}/${sample}.cutadapt.deduped.barcoded.fasta | awk '{print $1}') / 2 ))" >> ${directory_new}${sample}/${sample}.summary.txt
@@ -373,7 +358,6 @@ then
 
 ##########
 #Print the number of reads following pre-miRNA filtering in the 'sample.summary.txt' file
-
 	echo "${sample} pre-miRNA filtered: $(( $(wc -l ${directory_new}${sample}/${sample}.premiRNA.removed.fasta | awk '{print $1}') / 2 ))" >> ${directory_new}${sample}/${sample}.summary.txt
 ##########
 
@@ -424,8 +408,6 @@ fi
 #For further usage details: https://www.ncbi.nlm.nih.gov/books/NBK279690/pdf/Bookshelf_NBK279690.pdf
 
 #Align reads to sncRNA reference (configured during installation)
-# num_threads increased to 12 : Modified by ranjan
-
 	makeblastdb \
 	-in ${reference_directory}/fasta/${miRBase_species_abbreviation}/miRNA_${miRBase_species_abbreviation}.fasta \
 	-dbtype nucl
@@ -436,12 +418,11 @@ fi
 	-out ${directory_new}${sample}/${sample}.cutadapt.deduped.barcoded.blast \
 	-word_size 11 \
 	-outfmt 6 \
-	-num_threads 12 #\  Modified: Ranjan
-	# -strand plus
+	-num_threads 12
 
 	mv ${directory_new}${sample}/${sample}.cutadapt.deduped.barcoded.blast ${directory_new}${sample}/${sample}.cutadapt.deduped.barcoded.sncRNA.blast
 
-	# BLAST the filtered CLIPPED reads with the miRNA sequences (plus strand) #\  Modified: Ranjan
+	# BLAST the filtered CLIPPED reads with the miRNA sequences (plus strand)
 	blastn \
 	-db ${reference_directory}/fasta/${miRBase_species_abbreviation}/miRNA_${miRBase_species_abbreviation}.fasta \
 	-query ${directory_new}${sample}/${sample}.cutadapt.deduped.barcoded.fasta \
@@ -453,7 +434,7 @@ fi
 
 	mv ${directory_new}${sample}/${sample}.cutadapt.deduped.barcoded.blast ${directory_new}${sample}/${sample}.cutadapt.deduped.barcoded.miRNA.plus.blast
 
-	# BLAST the filtered CLIPPED reads with the miRNA sequences (minus strand) #\  Modified: Ranjan
+	# BLAST the filtered CLIPPED reads with the miRNA sequences (minus strand)
 	blastn \
 	-db ${reference_directory}/fasta/${miRBase_species_abbreviation}/miRNA_${miRBase_species_abbreviation}.fasta \
 	-query ${directory_new}${sample}/${sample}.cutadapt.deduped.barcoded.fasta \
@@ -472,10 +453,9 @@ fi
 	-out ${directory_new}${sample}/${sample}.hairpin.miRNA.blast \
 	-word_size 11 \
 	-outfmt 6 \
-	-num_threads 12 		#\  Modified: Ranjan
-	# -strand plus
+	-num_threads 12
 
-	# BLAST the filtered CLIPPED reads with the hairpin sequences (plus strand)		#\  Modified: Ranjan
+	# BLAST the filtered CLIPPED reads with the hairpin sequences (plus strand)
 	blastn \
 	-db ${reference_directory}/fasta/${miRBase_species_abbreviation}/hairpin_${miRBase_species_abbreviation}.fasta \
 	-query ${directory_new}${sample}/${sample}.cutadapt.deduped.barcoded.fasta \
@@ -487,7 +467,7 @@ fi
 
 	mv ${directory_new}${sample}/${sample}.cutadapt.deduped.barcoded.blast ${directory_new}${sample}/${sample}.cutadapt.deduped.barcoded.hairpin.plus.blast
 
-	# BLAST the filtered CLIPPED reads with the hairpin sequences (minus strand)		#\  Modified: Ranjan
+	# BLAST the filtered CLIPPED reads with the hairpin sequences (minus strand)
 	blastn \
 	-db ${reference_directory}/fasta/${miRBase_species_abbreviation}/hairpin_${miRBase_species_abbreviation}.fasta \
 	-query ${directory_new}${sample}/${sample}.cutadapt.deduped.barcoded.fasta \
@@ -532,7 +512,6 @@ fi
 	awk '!x[$1]++' \
 	> ${directory_new}${sample}/${sample}.cutadapt.deduped.barcoded.hairpin.minus.blast.filtered
 
-	# rm ${directory_new}${sample}/${sample}.cutadapt.deduped.barcoded.blast		# Commented: modified Ranjan
 	join \
 	<(sort -k1,1 ${directory_new}${sample}/${sample}.cutadapt.deduped.barcoded.miRNA.plus.blast.filtered -T ${directory_new}${sample}) \
 	<(sort -k1,1 ${directory_new}${sample}/${sample}.cutadapt.deduped.barcoded.hairpin.plus.blast.filtered -T ${directory_new}${sample}) \
@@ -656,8 +635,7 @@ awk 'function abs(x){return ((x < 0.0) ? -x : x)} \
 	${directory_new}${sample}/${sample}.cutadapt.deduped.barcoded.fasta \
 	> ${directory_new}${sample}/${sample}.cutadapt.deduped.barcoded.tab
 
-	# rm ${directory_new}${sample}/${sample}.cutadapt.deduped.barcoded.fasta			# Commented: modified Ranjan
-# rename the file to join th epipeline
+# rename the file to join the pipeline
 mv test.miRNA.alignments.blast ${directory_new}${sample}/${sample}.cutadapt.deduped.barcoded.blast.filtered
 
 #=====================================================================================================
@@ -667,8 +645,8 @@ mv test.miRNA.alignments.blast ${directory_new}${sample}/${sample}.cutadapt.dedu
 	<(sort -k1,1 ${directory_new}${sample}/${sample}.cutadapt.deduped.barcoded.tab -T ${directory_new}${sample}) \
 	> ${directory_new}${sample}/${sample}.blast.merged
 
-	# rm ${directory_new}${sample}/${sample}.cutadapt.deduped.barcoded.blast.filtered			# Commented: modified Ranjan
-	# rm ${directory_new}${sample}/${sample}.cutadapt.deduped.barcoded.tab			# Commented: modified Ranjan
+	rm ${directory_new}${sample}/${sample}.cutadapt.deduped.barcoded.blast.filtered
+	rm ${directory_new}${sample}/${sample}.cutadapt.deduped.barcoded.tab
 
 ##########
 #Print the number of reads containing a sncRNA (satisfying BLAST filters) in the 'sample.summary.txt' file
@@ -679,17 +657,16 @@ mv test.miRNA.alignments.blast ${directory_new}${sample}/${sample}.cutadapt.dedu
 
 #Create FASTA file with sequence of sncRNA remove and name appended to the read ID
 #Only output reads containing minimum length of sequence (parameter indicated at the beginning of the script) following sncRNA removal
-
 	awk '{stop=$8;readlength=length($13);print $0,"\t", readlength-(stop)}' ${directory_new}${sample}/${sample}.blast.merged | \
 	awk -v var1=$minimum_length_after_sncRNA '$14 >= var1' | \
 	awk '{print $0,"\t",substr($13, $8+1, length($13)-($8))}' | \
 	awk '{print">"$1"."$2"\n"$15}' \
 	> ${directory_new}${sample}/${sample}.target.fasta
 
-#	rm ${directory_new}${sample}/${sample}.blast.merged
+	rm ${directory_new}${sample}/${sample}.blast.merged
 
 ##########
-#Print the number of reads containing a sncRNA (satisfying BLAST filters) and minimumum length of sequence in the 'sample.summary.txt' file
+#Print the number of reads containing a sncRNA (satisfying BLAST filters) and minimum length of sequence in the 'sample.summary.txt' file
 	echo "${sample} potential chimeras: $(( $(wc -l ${directory_new}${sample}/${sample}.target.fasta | awk '{print $1}') / 2 ))" >> ${directory_new}${sample}/${sample}.summary.txt
 ##########
 
@@ -727,4 +704,3 @@ echo "Finish: $(date)" >> ${directory_new}${sample}/${sample}.summary.txt
 done
 
 conda deactivate
-
