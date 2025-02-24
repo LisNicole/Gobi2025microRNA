@@ -2,8 +2,6 @@
 
 set -e
 
-
-
 while getopts d:a:r:c:l:f:m:g: flag
 do
     case "${flag}" in
@@ -207,7 +205,7 @@ do
 	-c 6 \
 	-o distinct \
 	> ${directory}PeakCalling/combined.rearranged.sorted.merged
-	#here we have the first candidates for our peaks
+#Here we have the first candidates for our peaks
 
 #Determine coverage across overlapping regions
 #Remove regions with fewer than minimum read threshold (assigned at beginning of script)
@@ -344,28 +342,6 @@ fi
   else
       cp "$peak_summary_file" "${directory}peakcalling.summary_c${minimum_reads}_l${minimum_libraries}.txt"
 fi
-
-	#echo "Finish: $(date)" >> ${directory}PeakCalling/peakcalling.summary.txt
-	#echo "Samples:" >> ${directory}PeakCalling/peakcalling.summary.txt
-	#echo "${samples}" >> ${directory}PeakCalling/peakcalling.summary.txt
-	#echo "miRBase species abbreviation: ${miRBase_species_abbreviation}" >> ${directory}PeakCalling/peakcalling.summary.txt
-	#echo "Genome species abbreviation: ${genome_species_abbreviation}" >> ${directory}PeakCalling/peakcalling.summary.txt
-	#echo "Peaks called by family? ${family}" >> ${directory}PeakCalling/peakcalling.summary.txt
-	#echo "Minimum reads: ${minimum_reads}" >> ${directory}PeakCalling/peakcalling.summary.txt
-	#echo "Minimum libraries: ${minimum_libraries}" >> ${directory}PeakCalling/peakcalling.summary.txt
-	#echo "Cycles complete: $(wc -l ${directory}PeakCalling/cycles.txt | awk '{print $1}')" >> ${directory}PeakCalling/peakcalling.summary.txt
-	#echo "Total peaks: $(wc -l ${directory}PeakCalling/peaks.bed | awk '{print $1}')" >> ${directory}PeakCalling/peakcalling.summary.txt
-
-#if [ $family == "yes" ]
-#then
-
-	#cp ${directory}PeakCalling/peakcalling.summary.txt ${directory}peakcalling.family.summary.txt
-
-#else
-
-#	cp ${directory}PeakCalling/peakcalling.summary.txt ${directory}peakcalling.summary.txt
-
-#fi
 
 	rm -r ${directory}PeakCalling
 
